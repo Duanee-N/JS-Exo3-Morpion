@@ -1,0 +1,104 @@
+<!DOCTYPEhtml>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css">
+        <title>JS-Exo3-Morpion</title>
+    </head>
+    <body>
+        <div id="container">
+            <h1>Tic Tac Toe</h1>
+            <div id="board"></div>
+            <div id="txtBoard"></div>
+        </div>
+
+        <script>
+            function player1(){
+                playerX=prompt("Player 1 : Pseudo ?")
+                if(playerX==null || playerX==0){
+                    alert("Player 1 : Veuillez choisir un pseudo.")
+                    player1()
+                }
+            }
+
+            function player2(){
+                playerO=prompt("Player 2 : Pseudo ?")
+                if(playerO==null || playerO==0){
+                    alert("Player 2 : Veuillez choisir un pseudo.")
+                    player2()
+                }
+            }
+
+            function deleteAll(){
+                board.querySelectorAll("div").forEach(function(box){
+                    box.remove("div")
+                    box.classList.remove("box-clicked")
+                    box.classList.add("display")
+                })
+                
+                txtBoard.querySelectorAll("p").forEach(function(text){
+                text.remove("p")
+                })
+            }
+
+            const container= document.querySelector("#container")
+
+            const board= document.querySelector("#board")
+
+            const box=document.createElement("div")
+            box.classList.add("box")
+
+            const txtBoard=document.querySelector("#txtBoard")
+            
+            const txt=document.createElement("p")
+            txtBoard.appendChild(txt)
+            let playerX
+            let playerO
+            let playerTurn
+            startGame()
+            
+            function startGame(){
+                player1() //Choix pseudo playerX
+                player2() //Choix pseudo playerO
+                
+                let nb=9
+                let tour=0
+                playerTurn=playerX
+                let newTxt=txt.cloneNode()
+                newTxt.innerText="It's " +playerTurn+ " turn !"
+                txtBoard.appendChild(newTxt)
+                for(let i=0; i<nb; i++){
+                    let newbox = box.cloneNode()
+                    newbox.classList.add(i) //numérotation de chaque case
+				    board.appendChild(newbox)
+
+                    newbox.addEventListener("click", function(){
+                        if(tour<8){
+                            if (newbox.classList.contains(".box-clicked")){
+                                alert("Case déjà prise !")
+                            } else if(playerTurn==playerX){
+                                newbox.innerText = "X"
+                                newbox.classList.add("caseX")
+                                newbox.classList.add("box-clicked")
+                                playerTurn=playerO //changement de joueur
+                                tour++
+                            } else{
+                                newbox.innerText = "O"
+                                newbox.classList.add("caseO")
+                                newbox.classList.add("box-clicked")
+                                playerTurn=playerX
+                                tour++
+                            }
+                            newTxt.innerText="It's " +playerTurn+ " turn !"
+                            txtBoard.appendChild(newTxt)
+                        } else{
+                            deleteAll()
+                            alert("Jeu terminé !")
+                            startGame()
+                        }
+                    }, {once:true})//{once:true} pour cliquer une seule fois 
+                }
+            }
+        </script>
+    </body>
+</html>
